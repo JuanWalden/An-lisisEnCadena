@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadena Emocional - Herramienta de Análisis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente más moderna */
+            background-color: #f5f7fa; /* Fondo suave */
+            color: #333; /* Color de texto principal */
+            line-height: 1.6;
+        }
+
+        /* Encabezado */
+        .header {
+            background: linear-gradient(135deg, #6e8efb, #a777e3); /* Gradiente atractivo */
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            border-radius: 0 0 1rem 1rem;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 300; /* Más ligero */
+            margin-bottom: 0.5rem;
+        }
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+
+        .container { max-width: 900px; } /* Contenedor más ancho para escritorio */
+
+        /* Tarjetas */
+        .card {
+            border: none;
+            border-radius: 1rem; /* Bordes más redondeados */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+            transition: transform 0.2s ease-in-out; /* Efecto al pasar el ratón */
+            margin-bottom: 1.5rem;
+            overflow: hidden; /* Para las esquinas redondeadas del contenido */
+        }
+        .card:hover {
+            transform: translateY(-5px); /* Ligero desplazamiento hacia arriba */
+        }
+        .card-header {
+            background-color: #f0f3f5; /* Encabezado de tarjeta suave */
+            border-bottom: 1px solid #e1e5e8;
+            font-weight: bold;
+        }
+        .card-body { padding: 1.5rem; }
+
+        /* Formulario */
+        .form-label {
+            font-weight: 600; /* Etiquetas más destacadas */
+            margin-bottom: 0.3rem; /* Espacio reducido */
+        }
+        .form-control {
+            border-radius: 0.5rem; /* Bordes redondeados */
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Resaltado al enfocar */
+        }
+        textarea.form-control {
+            min-height: 100px; /* Altura mínima para textareas */
+        }
+
+        /* Botones */
+       .btn {
+           padding: 0.5rem 1.2rem; /* Más espacio */
+            border-radius: 0.5rem; /*Bordes redondeados*/
+            font-weight: 600;
+            transition: all 0.3s ease; /*Transición suave para todos los botones*/
+        }
+
+        .btn-primary { /* Botón principal */
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3; /* Color un poco más oscuro al pasar el ratón */
+            border-color: #0056b3;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Sombra ligera */
+        }
+
+        .btn-secondary { /*Botón secundario (Limpiar)*/
+            background-color: #f8f9fa; /* Color de fondo claro */
+            border-color: #ced4da; /* Borde gris claro */
+            color: #343a40; /* Texto oscuro */
+        }
+
+        .btn-secondary:hover {
+             background-color: #e2e6ea; /* Color un poco más oscuro al pasar el ratón */
+             border-color: #b3b7bb; /* Borde más oscuro */
+            color: #23272b; /*Texto más oscuro*/
+        }
+
+        .btn-success { /*Botón de éxito (PDF)*/
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        .btn-success:hover {
+            background-color: #1e7e34;
+            border-color: #1c7430;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .btn-info { /* Botón para consejos/ayuda */
+             background-color: #17a2b8;
+             border-color: #17a2b8;
+        }
+        .btn-info:hover {
+            background-color: #117a8b;
+            border-color: #10707f;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Sombra ligera */
+        }
+
+        /* Lista de pasos */
+        .step-list {
+            list-style: none;
+            padding: 0;
+        }
+        .step-list li {
+            margin-bottom: 0.5rem;
+        }
+        .step-list li::before {
+            content: "•"; /* Viñeta personalizada */
+            color: #6e8efb; /* Color de la viñeta */
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+        /* Sección de ejemplo */
+        .example-section {
+            border-left: 4px solid #6e8efb; /* Borde decorativo */
+            padding-left: 1rem;
+            margin-top: 1rem;
+        }
+        .example-section strong {
+            color: #6e8efb;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 2rem; /* Espacio */
+            border-top: 1px solid #eaeaea;
+        }
+
+          /* Mejoras para pantallas pequeñas */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem; /* Título más pequeño */
+            }
+            .container {
+                padding: 0 1rem; /* Más espacio lateral */
+            }
+        }
+
+         /* Tooltips */
+         .tooltip-inner {
+             background-color: #6e8efb; /* Color de fondo */
+             color: white; /* Color de texto */
+             border-radius: 0.5rem; /* Bordes redondeados */
+             padding: 0.5rem 0.75rem; /* Espaciado interno */
+         }
+         .bs-tooltip-auto[data-popper-placement^=bottom] .tooltip-arrow::before,
+         .bs-tooltip-bottom .tooltip-arrow::before {
+             border-bottom-color: #6e8efb; /* Color de la flecha */
+         }
+
+         /* Animación de carga */
+         .loading-overlay {
+             position: fixed;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             background-color: rgba(255, 255, 255, 0.8);
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             z-index: 1050; /* Por encima de todo */
+             visibility: hidden; /* Inicialmente oculto */
+             opacity: 0;
+             transition: visibility 0s, opacity 0.3s ease;
+         }
+         .loading-overlay.show {
+             visibility: visible;
+             opacity: 1;
+         }
+         .spinner-border {
+             color: #6e8efb; /* Color del spinner */
+         }
+         /*Modal*/
+         .modal-title{
+            color: #6e8efb;
+         }
+         /*Input historiales*/
+         #historialAnalisis {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ced4da;
+            border-radius: 0.3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><i class="fas fa-brain"></i> Cadena Emocional</h1>
+        <p>Herramienta de Análisis y Regulación Emocional</p>
+    </div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-edit"></i> Análisis de la Cadena Emocional
+                    </div>
+                    <div class="card-body">
+                        <select id="historialAnalisis" class="form-select mb-3">
+                            <option value="">Selecciona un análisis anterior...</option>
+                            </select>
+                        <form id="chainForm">
+                            <div class="mb-3">
+                                <label for="antecedente" class="form-label">
+                                    <i class="fas fa-map-marker-alt"></i> Antecedente
+                                    <span class="text-muted">(Situación, lugar, personas presentes)</span>
+                                     <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="Describe detalladamente el contexto donde ocurrió la emoción."></i>
+                                </label>
+                                <textarea class="form-control" id="antecedente" rows="3" required placeholder="Ej: Estaba en el trabajo, durante una reunión de equipo..."></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="emocion" class="form-label">
+                                    <i class="fas fa-heart"></i> Emoción/Impulso Inicial
+                                    <span class="text-muted">(Nombre de la emoción, intensidad)</span>
+                                    <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="Identifica la emoción principal que sentiste y su fuerza en una escala del 1 al 10."></i>
+
+                                </label>
+                                <input type="text" class="form-control" id="emocion" required placeholder="Ej: Ansiedad (8/10)">
+                            </div>
+                            <div class="mb-3">
+                                <label for="pensamientos" class="form-label">
+                                    <i class="fas fa-comments"></i> Pensamientos Asociados
+                                     <span class="text-muted">(Ideas, preocupaciones, diálogos internos)</span>
+                                    <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="Escribe los pensamientos que pasaron por tu mente en ese momento."></i>
+
+                                </label>
+                                <textarea class="form-control" id="pensamientos" rows="3" required placeholder="Ej: 'Voy a hacer el ridículo', 'No voy a saber qué decir'..."></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="comportamiento" class="form-label">
+                                    <i class="fas fa-running"></i> Comportamiento
+                                     <span class="text-muted">(Acciones, respuestas, evitación)</span>
+                                      <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="¿Qué hiciste o qué evitaste hacer como respuesta a la emoción?"></i>
+                                </label>
+                                <input type="text" class="form-control" id="comportamiento" required placeholder="Ej: Me quedé callado, evité el contacto visual...">
+                            </div>
+                            <div class="mb-3">
+                                <label for="consecuencia" class="form-label">
+                                    <i class="fas fa-exclamation-triangle"></i> Consecuencia
+                                     <span class="text-muted">(Resultados a corto y largo plazo)</span>
+                                    <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="Considera las consecuencias inmediatas y cómo podría afectar a futuro."></i>
+                                </label>
+                                <textarea class="form-control" id="consecuencia" rows="3" required placeholder="Ej: Alivio temporal, pero luego me sentí culpable..."></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="intervencion" class="form-label">
+                                    <i class="fas fa-handshake"></i> Intervención Propuesta
+                                    <span class="text-muted">(Alternativas, estrategias de regulación)</span>
+                                     <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="Piensa en formas más adaptativas de manejar la situación en el futuro."></i>
+                                </label>
+                                <textarea class="form-control" id="intervencion" rows="3" required placeholder="Ej: Practicar técnicas de respiración, preparar mejor la presentación..."></textarea>
+                            </div>
+
+                            <div class="text-center">
+                                 <button type="submit" class="btn btn-primary me-2">
+                                     <i class="fas fa-save"></i> Guardar Análisis
+                                </button>
+                                <button type="button" class="btn btn-secondary me-2" onclick="limpiarFormulario()">
+                                    <i class="fas fa-eraser"></i> Limpiar
+                                </button>
+                                <button type="button" class="btn btn-success" onclick="exportarAPDF()">
+                                    <i class="fas fa-file-pdf"></i> Exportar a PDF
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                 <button type="button" class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#ayudaModal">
+                    <i class="fas fa-question-circle"></i> Ayuda y Consejos
+                </button>
+                <div class="modal fade" id="ayudaModal" tabindex="-1" aria-labelledby="ayudaModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="ayudaModalLabel">Guía Rápida: Análisis en Cadena</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h6><i class="fas fa-lightbulb"></i> ¿Qué es el Análisis en Cadena?</h6>
+                                <p>Es una herramienta para entender cómo se conectan tus emociones, pensamientos, comportamientos y las consecuencias de estos.  Te ayuda a identificar patrones y a encontrar formas más efectivas de manejar tus reacciones.</p>
+
+                                <h6><i class="fas fa-shoe-prints"></i> Pasos para un Análisis Efectivo:</h6>
+                                <ol class="step-list">
+                                    <li><strong>Antecedente:</strong> Sé específico. ¿Dónde estabas? ¿Quién estaba presente? ¿Qué estabas haciendo justo antes de que surgiera la emoción?</li>
+                                    <li><strong>Emoción/Impulso:</strong> Nombra la emoción con precisión.  Si es difícil, usa una lista de emociones (¡búscala en línea!).  La intensidad es clave: un ligero nerviosismo es diferente a un ataque de pánico.</li>
+                                    <li><strong>Pensamientos:</strong> Anota *todos* los pensamientos, incluso los que parezcan tontos o irracionales.  Estos son los que alimentan la emoción.  No los juzgues, solo escríbelos.</li>
+                                    <li><strong>Comportamiento:</strong> ¿Qué hiciste *exactamente*?  ¿Te quedaste callado, te fuiste, dijiste algo hiriente?  Incluye también lo que *evitaste* hacer.</li>
+                                    <li><strong>Consecuencia:</strong> Piensa en el corto y largo plazo.  ¿Cómo te sentiste *inmediatamente* después? ¿Y cómo te afectó horas o días después? ¿Afectó tus relaciones o tu trabajo?</li>
+                                    <li><strong>Intervención:</strong> Aquí viene la parte poderosa.  ¿Qué *podrías* haber hecho diferente?  No te limites a lo "ideal", piensa en cosas *realistas* que podrías practicar.  Incluye:
+                                        <ul>
+                                            <li><strong>Técnicas de regulación emocional:</strong> Respiración profunda, relajación muscular, mindfulness.</li>
+                                            <li><strong>Reestructuración cognitiva:</strong> Cuestionar tus pensamientos negativos. ¿Son *realmente* ciertos? ¿Hay otra forma de ver la situación?</li>
+                                            <li><strong>Habilidades sociales:</strong> Si el problema es interpersonal, ¿cómo podrías comunicarte mejor o establecer límites?</li>
+                                            <li><strong>Exposición gradual:</strong> Si evitas algo, ¿cómo podrías enfrentarlo poco a poco?</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+
+                                 <h6><i class="fas fa-exclamation-circle"></i> Errores Comunes:</h6>
+                                 <ul>
+									<li><strong>Ser demasiado general:</strong> "Me sentí mal" no es suficiente.  Profundiza.</li>
+									<li><strong>Saltarse pasos:</strong> Cada eslabón de la cadena es importante.</li>
+									<li><strong>Juzgar tus pensamientos y emociones:</strong> El objetivo no es sentirte culpable, sino entender.</li>
+									<li><strong>Rendirse ante la evitación:</strong> La evitación refuerza el problema.  Busca formas de enfrentarlo gradualmente.</li>
+									<li><strong>Olvidar las consecuencias a largo plazo:</strong> A veces, el alivio inmediato tiene un costo futuro.</li>
+								</ul>
+
+                                <h6><i class="fas fa-brain"></i> Consejos Adicionales:</h6>
+                                <ul>
+                                    <li><strong>Sé honesto contigo mismo:</strong> La honestidad brutal es clave para que esto funcione.</li>
+                                    <li><strong>Practica regularmente:</strong> Cuanto más uses esta herramienta, más fácil será identificar tus patrones.</li>
+                                    <li><strong>No te desanimes:</strong> Cambiar patrones lleva tiempo y esfuerzo.  Sé paciente contigo mismo.</li>
+                                    <li><strong>Considera buscar apoyo profesional:</strong> Un terapeuta puede ayudarte a profundizar en tu análisis y a desarrollar estrategias personalizadas.</li>
+                                    <li><strong>Lleva un registro:</strong> Guarda tus análisis para ver tu progreso a lo largo del tiempo.  Esto te ayudará a ver qué funciona y qué no.</li>
+                                </ul>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card example-section">
+                    <div class="card-header">
+                       <i class="fas fa-eye"></i> Ejemplo: Ansiedad Social
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Antecedente:</strong> En una fiesta, un amigo me presentó a un grupo de personas que no conocía.</p>
+                        <p><strong>Emoción:</strong> Ansiedad intensa (9/10), miedo al rechazo.</p>
+                        <p><strong>Pensamientos:</strong> "Van a pensar que soy aburrido", "No sé qué decir", "Seguro que me juzgan", "Voy a hacer el ridículo".</p>
+                        <p><strong>Comportamiento:</strong> Me quedé callado, evité el contacto visual, me excusé y me fui a un rincón apartado.</p>
+                        <p><strong>Consecuencia:</strong> Alivio inmediato, pero luego me sentí solo, frustrado y con más ansiedad ante futuras situaciones sociales.</p>
+                        <p><strong>Intervención:</strong>
+                            <ul>
+                                <li>Respirar profundamente varias veces para calmarme.</li>
+                                <li>Recordar que la mayoría de la gente no me está juzgando tan duramente como yo creo (reestructuración cognitiva).</li>
+                                <li>Preparar algunos temas de conversación básicos de antemano.</li>
+                                <li>Empezar con interacciones pequeñas (saludar, hacer una pregunta sencilla).</li>
+                                <li>Practicar la exposición gradual: ir a eventos sociales más pequeños y aumentar la duración y la interacción poco a poco.</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2023 Centro Rol, Juan Orta | Desarrollado con fines educativos</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.0/jspdf.plugin.autotable.min.js"></script>
+     <script>
+        // Inicializar tooltips
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+
+        // Guardar análisis en localStorage
+        function guardarAnalisis() {
+             const analisis = {
+                antecedente: document.getElementById('antecedente').value,
+                emocion: document.getElementById('emocion').value,
+                pensamientos: document.getElementById('pensamientos').value,
+                comportamiento: document.getElementById('comportamiento').value,
+                consecuencia: document.getElementById('consecuencia').value,
+                intervencion: document.getElementById('intervencion').value,
+                fecha: new Date().toLocaleString() // Añadir fecha y hora
+            };
+
+            let historiales = JSON.parse(localStorage.getItem('historialAnalisis')) || [];
+            historiales.push(analisis);
+             // Limitar el historial a los últimos 10 análisis
+            if (historiales.length > 10) {
+                 historiales = historiales.slice(-10);
+            }
+            localStorage.setItem('historialAnalisis', JSON.stringify(historiales));
+             actualizarHistorialSelect(); //Actualiza el selector
+             alert('Análisis guardado exitosamente!');
+
+        }
+        //Cargar analisis desde localStorage
+         function cargarAnalisis(index) {
+            const historiales = JSON.parse(localStorage.getItem('historialAnalisis')) || [];
+            const analisis = historiales[index];
+
+            if (analisis) {
+                document.getElementById('antecedente').value = analisis.antecedente;
+                document.getElementById('emocion').value = analisis.emocion;
+                document.getElementById('pensamientos').value = analisis.pensamientos;
+                document.getElementById('comportamiento').value = analisis.comportamiento;
+                document.getElementById('consecuencia').value = analisis.consecuencia;
+                document.getElementById('intervencion').value = analisis.intervencion;
+            }
+        }
+
+        //Actualizar el selector de historial
+        function actualizarHistorialSelect() {
+            const historiales = JSON.parse(localStorage.getItem('historialAnalisis')) || [];
+            const select = document.getElementById('historialAnalisis');
+            select.innerHTML = '<option value="">Selecciona un análisis anterior...</option>'; //Limpia
+
+            historiales.forEach((analisis, index) => {
+                const option = document.createElement('option');
+                //Muestra la fecha/hora y el antecedente
+                option.value = index;
+                option.textContent = `${analisis.fecha} - ${analisis.antecedente.substring(0, 30)}${analisis.antecedente.length > 30 ? "..." : ""}`;
+                select.appendChild(option);
+            });
+             //Añadir un evento change al selector para cargar el análisis
+            select.addEventListener('change', (event) => {
+                const index = event.target.value;
+                if (index !== '') {
+                    cargarAnalisis(index);
+                }
+            });
+        }
+
+
+        // Limpiar el formulario
+        function limpiarFormulario() {
+            document.getElementById('chainForm').reset();
+             document.getElementById('historialAnalisis').value = ''; //Resetea el selector de historial
+        }
+
+        // Exportar a PDF (usando jsPDF y autoTable)
+        function exportarAPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+             // Mostrar la capa de carga
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.classList.add('show');
+
+
+            // Título del PDF
+            doc.setFontSize(18);
+            doc.text('Análisis de Cadena Emocional', 105, 20, { align: 'center' });
+
+            // Preparar los datos para la tabla
+             const tableData = [
+                [{content: 'Antecedente', styles: {fontStyle: 'bold'}}, document.getElementById('antecedente').value],
+                [{content: 'Emoción/Impulso', styles: {fontStyle: 'bold'}}, document.getElementById('emocion').value],
+                [{content: 'Pensamientos', styles: {fontStyle: 'bold'}}, document.getElementById('pensamientos').value],
+                [{content: 'Comportamiento', styles: {fontStyle: 'bold'}}, document.getElementById('comportamiento').value],
+                [{content: 'Consecuencia', styles: {fontStyle: 'bold'}}, document.getElementById('consecuencia').value],
+                [{content: 'Intervención', styles: {fontStyle: 'bold'}}, document.getElementById('intervencion').value],
+            ];
+			//Estilos de la tabla
+            const tableStyles = {
+                startY: 30,
+                headStyles: { fillColor: [110, 142, 251], textColor: 255, fontStyle: 'bold' }, // Encabezados azules
+                bodyStyles: { textColor: 51 },
+                alternateRowStyles: { fillColor: [245, 247, 250] }, // Filas alternas con color
+                margin: { top: 10, bottom: 10, left: 10, right: 10 }, // Márgenes
+                theme: 'striped', // Tema con rayas (opciones: 'striped', 'grid', 'plain')
+                styles: {
+                    fontSize: 10,
+                    cellPadding: 3,
+                    overflow: 'linebreak', //Salto de línea en caso de textos largos
+                    halign: 'left', // Alineación horizontal del contenido
+                    valign: 'middle', // Alineación vertical del contenido
+                },
+				columnStyles: { // Estilo para columnas específicas (si es necesario)
+					0: {cellWidth: 50},
+					1: {cellWidth: 'auto'}
+				}
+			};
+
+            doc.autoTable({
+                body: tableData,
+                ...tableStyles
+            });
+
+            doc.save('analisis_cadena_emocional.pdf');
+            // Ocultar la capa de carga después de generar el PDF
+            loadingOverlay.classList.remove('show');
+        }
+
+
+
+        // Event listener para el formulario
+        document.getElementById('chainForm').addEventListener('submit', (e) => {
+            e.preventDefault(); // Prevenir el envío tradicional
+            guardarAnalisis(); // Usa la función para guardar
+        });
+
+        //Cargar historial al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            actualizarHistorialSelect();
+        });
+
+    </script>
+</body>
+</html>
